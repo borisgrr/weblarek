@@ -1,10 +1,10 @@
-import type { TPayment, IBuyer } from '../../types';
+import type { TPayment, IBuyer, ValidationErrors } from '../../types';
 
 export class Buyer {
-  payment: TPayment = 'card';
-  email: string = '';
-  phone: string = '';
-  address: string = '';
+  private payment: TPayment | '' = '';
+  private email: string = '';
+  private phone: string = '';
+  private address: string = '';
 
   setPayment(value: TPayment): void {
     this.payment = value;
@@ -32,27 +32,31 @@ export class Buyer {
   }
 
   clearBuyer(): void {
-    this.payment = 'card';
+    this.payment = '';
     this.email = '';
     this.phone = '';
     this.address = '';
   }
 
-  validateBuyer(): { payment?: string; email?: string; phone?: string; address?: string } {
-    const errors: { payment?: string; email?: string; phone?: string; address?: string } = {};
+  validateBuyer(): ValidationErrors {
+    const errors: ValidationErrors = {};
 
     if (!this.payment) {
       errors.payment = 'Выберите способ оплаты';
     }
+
     if (!this.email) {
       errors.email = 'Укажите email';
     }
+
     if (!this.phone) {
       errors.phone = 'Укажите телефон';
     }
+
     if (!this.address) {
       errors.address = 'Укажите адрес';
     }
+
     return errors;
   }
 }

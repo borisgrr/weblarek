@@ -16,8 +16,10 @@ export interface IProduct {
 
 export type TPayment = 'card' | 'cash';
 
+export type ValidationErrors = Partial<Record<keyof IBuyer, string>>;
+
 export interface IBuyer {
-  payment: TPayment;
+  payment: TPayment | '';
   email: string;
   phone: string;
   address: string;

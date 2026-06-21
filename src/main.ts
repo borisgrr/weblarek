@@ -11,9 +11,9 @@ const catalog = new Catalog();
 
 catalog.setItems(apiProducts.items);
 
-console.log('Массив товаров из каталога:', catalog.getItems());
+console.log('Каталог (локальные данные):', catalog.getItems());
 
-console.log('ID элемента: ', catalog.getItemById('854cef69-976d-4c2a-a18c-2aa45046c390'));
+console.log('Товар по ID:', catalog.getItemById('854cef69-976d-4c2a-a18c-2aa45046c390'));
 
 const catalogItemTest = catalog.getItemById('854cef69-976d-4c2a-a18c-2aa45046c390');
 
@@ -23,44 +23,47 @@ if (catalogItemTest) {
   const cart = new Cart();
 
   cart.addCartItem(catalogItemTest);
-  console.log(cart.getCartItems());
+  console.log('Корзина после добавления товара:', cart.getCartItems());
 
   cart.deleteCartItem(catalogItemTest);
-  console.log(cart.getCartItems());
+  console.log('Корзина после удаления товара:', cart.getCartItems());
 
   cart.addCartItem(catalogItemTest);
   cart.addCartItem(catalogItemTest);
 
-  console.log(cart.getCartTotal());
-  console.log(cart.getCartItemsCount());
+  console.log('Общая стоимость корзины:', cart.getCartTotal());
+  console.log('Количество товаров в корзине:', cart.getCartItemsCount());
 
-  console.log(cart.getCartItemById('854cef69-976d-4c2a-a18c-2aa45046c390'));
+  console.log('Проверка товара в корзине:', cart.getCartItemById('854cef69-976d-4c2a-a18c-2aa45046c390'));
 
   cart.clearCart();
-  console.log(cart.getCartItems());
+  console.log('Корзина после очистки:', cart.getCartItems());
 }
 
 const buyer = new Buyer();
 
 buyer.setPayment('card');
-
 buyer.setEmail('abc@yandex.ru');
-
 buyer.setPhone('+79036589669');
-
 buyer.setAddress('г.Москва ул. Спортивная д. 22');
 
-console.log(buyer.getBuyerData());
+console.log('Данные покупателя:', buyer.getBuyerData());
 
 buyer.clearBuyer();
 
-console.log(buyer.getBuyerData());
+console.log('Покупатель после очистки:', buyer.getBuyerData());
 
-console.log(buyer.validateBuyer());
+console.log('Ошибки валидации покупателя:', buyer.validateBuyer());
 
 const api = new Api(API_URL);
 const webLarekApi = new WebLarekApi(api);
 
-const products = await webLarekApi.getProducts();
-catalog.setItems(products.items);
-console.log(catalog.getItems());
+webLarekApi
+  .getProducts()
+  .then((products) => {
+    catalog.setItems(products.items);
+    console.log('Каталог (с сервера):', catalog.getItems());
+  })
+  .catch((err) => {
+    console.error('Ошибка загрузки товаров:', err);
+  });
